@@ -31,8 +31,11 @@
             :value="textValue"
           ></v-textarea>
         </v-form>
+<!--        <v-btn color="primary" @click="login">-->
+<!--          Twitterでログイン-->
+<!--        </v-btn>-->
         <v-btn color="primary" @click="add">
-          Twitterでログインして投稿
+          投稿する
         </v-btn>
       </div>
     </v-flex>
@@ -51,55 +54,41 @@ export default {
       latitude: 0,
       longitude: 0,
       position: {},
+      lineUserId: '',
+      shopId: '',
+      shopName: '',
+      // twitterUserId: '',
+      // twitterUserName: '',
+      // twitterUserPhotoUrl: '',
+      // isLogin: false,
     }
   },
   beforeMount() {
     this.latitude = parseFloat(this.$route.query.lat)
     this.longitude = parseFloat(this.$route.query.lon)
     this.position = { lat: this.latitude, lng: this.longitude }
-    console.log(this.position)
+    this.lineUserId = this.$route.query.uid
+    this.lineUserName = this.$route.query.un
+    this.lineUserPhoto = this.$route.query.up
+    this.shopId = this.$route.query.sid
+    this.shopName = this.$route.query.sn
   },
   methods: {
-    add() {
+    login() {
       console.log('login')
-      const lineUserId = this.$route.query.userId
-      const shopId = this.$route.query.shopId
-      const shopName = this.$route.query.shopName
-      const latitude = this.latitude
-      const longitude = this.longitude
-      const textValue = this.textValue
-      const router = this.$router
       const provider = new firebase.auth.TwitterAuthProvider()
+      const that = this
       firebase
         .auth()
-        .signInWithPopup(provider)
+        .signInWithRedirect(provider)
         .then(function (result) {
           const user = result.user
           // eslint-disable-next-line no-console
           console.log('success : ' + user.uid + ' : ' + user.displayName)
-          const db = firebase.firestore()
-          const ramensRef = db.collection('ramens')
-          const updateDateTime = moment().format('YYYY-MM-DD hh:mm:ss')
-          ramensRef
-            .add({
-              lineUserId,
-              twitterUserId: user.uid,
-              twitterUserName: user.displayName,
-              twitterUserPhotoUrl: user.photoURL.replace('_normal', ''),
-              shopId,
-              shopName,
-              updateDateTime,
-              ramenText: textValue,
-              latitude,
-              longitude,
-            })
-            .then(function (docRef) {
-              console.log('Document written with ID: ', docRef.id)
-              router.push('/thanks')
-            })
-            .catch(function (error) {
-              console.error('Error adding document: ', error)
-            })
+          that.twitterUserId = user.uid
+          that.twitterUserName = user.displayName
+          that.twitterUserPhotoUrl = user.photoURL.replace('_normal', '')
+          that.isLogin = true
         })
         .catch(function (error) {
           const errorCode = error.code
@@ -107,6 +96,31 @@ export default {
           console.log('error : ' + errorCode)
         })
     },
+    add() {
+      const db = firebase.firestore()
+      const ramensRef = db.collection('ramens')
+      const updateDateTime = moment().format('YYYY-MM-DD hh:mm:ss')
+      const that = this
+      ramensRef
+        .add({
+          lineUserId: that.lineUserId,
+          lineUserName: that.lineUserName,
+          lineUserPhoto: that.lineUserPhoto,
+          shopId: that.shopId,
+          shopName: that.shopName,
+          updateDateTime,
+          ramenText: that.textValue,
+          latitude: that.latitude,
+          longitude: that.longitude,
+        })
+        .then(function (docRef) {
+          console.log('Document written with ID: ', docRef.id)
+          that.$router.push('/thanks')
+        })
+        .catch(function (error) {
+          console.error('Error adding document: ', error)
+        })
+    }
   },
 }
 </script>
