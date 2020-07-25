@@ -7,7 +7,7 @@
           :center="position"
           :zoom="15"
           map-type-id="terrain"
-          style="width: 500px; height: 300px"
+          style="width: auto; height: 300px;"
         >
           <GmapMarker
             :position="position"
@@ -18,7 +18,7 @@
         </GmapMap>
         <v-form ref="form">
           <v-select
-            v-model="select"
+            v-model="starSelect"
             :items="items"
             :rules="[(v) => !!v || 'Item is required']"
             label="星いくつ？"
@@ -26,9 +26,10 @@
           ></v-select>
           <v-textarea
             counter
+            v-model="ramenText"
             label="ラーメン評論"
             :rules="textAreaRule"
-            :value="textValue"
+            :value="textSample"
           ></v-textarea>
         </v-form>
 <!--        <v-btn color="primary" @click="login">-->
@@ -50,13 +51,15 @@ export default {
     return {
       items: ['1', '2', '3', '4', '5'],
       textAreaRule: [(v) => v.length <= 2000 || 'Max 2000 characters'],
-      textValue: '評論家になったつもりで感想を書いてみよう！',
+      textSample: '評論家になったつもりで感想を書いてみよう！',
+      ramenText: '',
       latitude: 0,
       longitude: 0,
       position: {},
       lineUserId: '',
       shopId: '',
       shopName: '',
+      starSelect: '',
       // twitterUserId: '',
       // twitterUserName: '',
       // twitterUserPhotoUrl: '',
@@ -109,9 +112,10 @@ export default {
           shopId: that.shopId,
           shopName: that.shopName,
           updateDateTime,
-          ramenText: that.textValue,
+          ramenText: that.ramenText,
           latitude: that.latitude,
           longitude: that.longitude,
+          starSelect: that.starSelect,
         })
         .then(function (docRef) {
           console.log('Document written with ID: ', docRef.id)

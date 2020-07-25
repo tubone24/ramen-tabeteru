@@ -6,7 +6,7 @@
         :center="{ lat: 37.057372, lng: 139.327271 }"
         :zoom="6"
         map-type-id="terrain"
-        style="width: 500px; height: 300px;"
+        style="width: auto; height: 300px;"
       >
         <GmapMarker
           v-for="(m, index) in markers"
@@ -23,6 +23,7 @@
           :position="infoWindowPos"
           :opened="infoWinOpen"
           @closeclick="infoWinOpen = false"
+          style="color: black;"
         >
           {{ m.text }}</GmapInfoWindow
         >
@@ -108,7 +109,7 @@ export default {
 }
 </script>
 <style>
-.gm-style-iw {
+.gm-style.gm-style-iw {
   color: black;
 }
 </style>
