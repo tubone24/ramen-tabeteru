@@ -1,5 +1,5 @@
 <template>
-  <img class="Logo" alt="Logo" src="/sakubun_hansei.png" />
+  <img class="Logo" alt="Logo" src="/ramen_udon_yugiri.png" />
 </template>
 
 <style>
