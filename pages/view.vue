@@ -1,7 +1,12 @@
 <template>
   <v-layout column justify-center align-center>
     <v-flex xs12 sm8 md6>
-      <h2>{{ ramenData[0].lineUserName }}さんのラーメンライフログ</h2>
+      <h2>
+        {{ displayName || ramenData[0].lineUserName }}さんのラーメンライフログ
+      </h2>
+      <h3>
+        ふたつな: <b>{{ secondName }}</b>
+      </h3>
       <GmapMap
         :center="{ lat: 37.057372, lng: 139.327271 }"
         :zoom="6"
@@ -73,6 +78,10 @@ export default {
       },
       infoWindowPos: null,
       infoWinOpen: false,
+      lineUserId: '',
+      displayName: '',
+      secondName: '',
+      profileText: '',
     }
   },
   beforeCreate() {
@@ -81,24 +90,34 @@ export default {
     const ramenData = []
     const db = firebase.firestore()
     const ramensRef = db.collection('ramens')
-    ramensRef.get().then((res) => {
-      res.forEach((doc) => {
-        console.log('success : ' + `${doc.id} => ${doc.data()}`)
-        const data = doc.data()
-        if (data.lineUserId === that.lineUserId) {
+    const userDoc = db.collection('users').doc(this.lineUserId)
+    ramensRef
+      .where('lineUserId', '==', that.lineUserId)
+      .get()
+      .then((res) => {
+        res.forEach((doc) => {
+          console.log('success : ' + `${doc.id} => ${doc.data()}`)
+          const data = doc.data()
           ramenData.push(data)
-        }
+        })
+        that.ramenData = ramenData
+        console.log(that.ramenData)
+        that.markers = ramenData.map((item) => {
+          return {
+            position: { lat: item.latitude, lng: item.longitude },
+            text: item.shopName,
+          }
+        })
+        userDoc.get().then((doc) => {
+          if (doc.exists) {
+            const data = doc.data()
+            console.log(data)
+            that.displayName = data.displayName
+            that.profileText = data.profileText
+            that.secondName = data.secondName
+          }
+        })
       })
-      that.ramenData = ramenData
-      console.log(that.ramenData)
-      that.markers = ramenData.map((item) => {
-        return {
-          position: { lat: item.latitude, lng: item.longitude },
-          text: item.shopName,
-        }
-      })
-      console.log(that.markers)
-    })
   },
   methods: {
     toggleInfoWindow(marker) {
