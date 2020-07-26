@@ -49,7 +49,7 @@ export default {
       {
         hid: 'og:image',
         property: 'og:image',
-        content: 'https://apology-note.web.app/sakubun_hansei.png',
+        content: 'https://ramen-tabeteru.web.app/ramen_udon_yugiri.png',
       },
     ],
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
