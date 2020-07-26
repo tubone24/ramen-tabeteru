@@ -2,7 +2,7 @@
   <v-layout column justify-center align-center>
     <v-flex xs12 sm8 md6>
       <h2>
-        {{ displayName || ramenData[0].lineUserName }}さんのラーメンライフログ
+        {{ displayName }}さんのラーメンライフログ
       </h2>
       <h3>
         ふたつな: <b>{{ secondName }}</b>
@@ -48,6 +48,17 @@
             <v-card-text>
               {{ ramen.ramenText }}
             </v-card-text>
+            <v-list-item-avatar
+              tile
+              size="80"
+              color="grey"
+            >
+              <v-img
+                height="80"
+                width="80"
+                :src="ramen.imageUrl"
+              ></v-img>
+            </v-list-item-avatar>
           </v-card>
         </v-timeline-item>
       </v-timeline>
@@ -115,6 +126,8 @@ export default {
             that.displayName = data.displayName
             that.profileText = data.profileText
             that.secondName = data.secondName
+          } else {
+            that.displayName = that.lineUserName
           }
         })
       })

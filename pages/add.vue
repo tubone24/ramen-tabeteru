@@ -31,6 +31,14 @@
             :rules="textAreaRule"
             :value="textSample"
           ></v-textarea>
+          <v-file-input
+            @change="uploadFile"
+            :rules="imageRules"
+            accept="image/*"
+            placeholder="ラーメン画像を上げてね！"
+            prepend-icon="mdi-camera"
+            label="ラーメン画像"
+          ></v-file-input>
         </v-form>
 <!--        <v-btn color="primary" @click="login">-->
 <!--          Twitterでログイン-->
@@ -51,6 +59,12 @@ export default {
     return {
       items: ['1', '2', '3', '4', '5'],
       textAreaRule: [(v) => v.length <= 2000 || 'Max 2000 characters'],
+      imageRules: [
+        (value) =>
+          !value ||
+          value.size < 2000000 ||
+          'Avatar size should be less than 2 MB!',
+      ],
       textSample: '評論家になったつもりで感想を書いてみよう！',
       ramenText: '',
       latitude: 0,
@@ -60,6 +74,7 @@ export default {
       shopId: '',
       shopName: '',
       starSelect: '',
+      imageUrl: '',
       // twitterUserId: '',
       // twitterUserName: '',
       // twitterUserPhotoUrl: '',
@@ -99,6 +114,32 @@ export default {
           console.log('error : ' + errorCode)
         })
     },
+    uploadFile(e) {
+      const updateDateTime = moment().format('YYYYMMDDhhmmss')
+      const that = this
+      const storage = firebase.storage()
+      const storageRef = storage.ref()
+      const uploadTask = storageRef
+        .child(`images/${that.lineUserId}/${updateDateTime}${e.name}`)
+        .put(e)
+      uploadTask.on(
+        'state_changed',
+        (snapshot) => {
+          console.log('snapshot', snapshot)
+        },
+        (error) => {
+          console.log('err', error)
+        },
+        () => {
+          // Handle successful uploads on complete
+          // For instance, get the download URL: https://firebasestorage.googleapis.com/...
+          uploadTask.snapshot.ref.getDownloadURL().then(function (downloadURL) {
+            console.log('File available at', downloadURL)
+            that.imageUrl = downloadURL
+          })
+        }
+      )
+    },
     add() {
       const db = firebase.firestore()
       const ramensRef = db.collection('ramens')
@@ -116,6 +157,7 @@ export default {
           latitude: that.latitude,
           longitude: that.longitude,
           starSelect: that.starSelect,
+          imageUrl: that.imageUrl,
         })
         .then(function (docRef) {
           console.log('Document written with ID: ', docRef.id)

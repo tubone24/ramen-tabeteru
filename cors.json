@@ -1,0 +1,6 @@
+[{
+  "origin": ["ramen-tabeteru.web.app"],
+  "responseHeader": ["*"],
+  "method": ["GET", "POST", "PUT"],
+  "maxAgeSeconds": 86400
+}]
