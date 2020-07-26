@@ -32,19 +32,19 @@ export default {
       {
         hid: 'og:site_name',
         property: 'og:site_name',
-        content: 'Apology Note',
+        content: 'ラーメン食べたい',
       },
       { hid: 'og:type', property: 'og:type', content: 'website' },
       {
         hid: 'og:url',
         property: 'og:url',
-        content: 'https://apology-note.web.app',
+        content: 'https://ramen-tabeteru.web.app',
       },
-      { hid: 'og:title', property: 'og:title', content: 'サイト名' },
+      { hid: 'og:title', property: 'og:title', content: 'ラーメン食べたい' },
       {
         hid: 'og:description',
         property: 'og:description',
-        content: 'Apology Note',
+        content: 'ラーメン食べたいときに検索しよう',
       },
       {
         hid: 'og:image',

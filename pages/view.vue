@@ -9,7 +9,7 @@
       </h3>
       <GmapMap
         :center="{ lat: 37.057372, lng: 139.327271 }"
-        :zoom="6"
+        :zoom="4"
         map-type-id="terrain"
         style="width: auto; height: 300px;"
       >
