@@ -51,7 +51,15 @@
         <v-icon>mdi-map-marker</v-icon>
       </v-btn>
       <v-footer app>
-        <span>&copy; {{ new Date().getFullYear() }} tubone24</span>
+        <span
+          >&copy; {{ new Date().getFullYear() }}
+          <a
+            href="https://portfolio.tubone-project24.xyz/"
+            target="_blank"
+            rel="noopener noreferrer"
+            >tubone24</a
+          ></span
+        >
       </v-footer>
     </v-bottom-navigation>
 
