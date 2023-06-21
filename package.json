@@ -30,7 +30,7 @@
     "html2canvas": "^1.0.0-rc.5",
     "load-google-maps-api": "^2.0.2",
     "moment": "^2.27.0",
-    "nuxt": "^2.13.0",
+    "nuxt": "^3.4.3",
     "vue2-google-maps": "^0.10.7"
   },
   "devDependencies": {
